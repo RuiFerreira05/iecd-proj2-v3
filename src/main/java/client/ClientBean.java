@@ -111,6 +111,28 @@ public class ClientBean {
 		}
 	}
 	
+	public String[] getWof() {
+		if (!isConnected) {
+			return null;
+		}
+		String[] wofData = new String[15];
+		writer.println("getXML walloffame");
+		try {
+			String response = reader.readLine();
+			String[] parts = response.split(" ");
+			if (parts[0].equals("found")) {
+				for (int i = 1; i < parts.length; i++) {
+					wofData[i - 1] = parts[i];
+				}
+				return wofData;
+			}
+			return null;
+		} catch (Exception e) {
+			System.out.println("Something went wrong with getWof: " + e.getMessage());
+			return null;
+		}
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}
