@@ -1,0 +1,103 @@
+@font-face {
+    font-family: "VT323";
+    src: url(../fonts/VT323-Regular.ttf) format("truetype");
+}
+
+body, html{
+    height: 100%;
+}
+
+body{
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    font-style: normal;
+    background-image: url(../images/Background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.title-container{
+    margin-top: 40px;
+    color: #f9cd88;
+    text-align: center;
+    font-size: 100px;
+}
+
+.wall-container{
+    display: flex;
+    justify-content: center;
+}
+
+.wall{
+    display: grid;
+    /* place-items: center; */
+    grid-auto-rows: 70px;
+    margin-top: 30px;
+    background-color: #f9cd88;
+    width: 60%;
+    height: 400px;
+    border-style: solid;
+    border-width: 35px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+    margin-bottom: 30px;
+}
+
+.button-container{
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button-input{
+    height: 50px;
+    width: 100px;
+    margin-inline: 50px;
+    background-color: #f9cd88;
+    border-style: solid;
+    border-width: 10px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+    font-size: 30px;
+    font-family: "VT323", monospace;
+    cursor: pointer;
+}
+
+.player-example{
+    display: flex;
+    justify-content: space-between;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: #8b402f;
+}
+
+.place{
+    padding-top: 15px;
+    text-align: center;
+    font-size: 40px;
+    margin-left: 20px;
+}
+
+.photo{
+    width: 80px;
+    height: 100%;
+    object-fit: cover;
+    margin-left: 20px;
+}
+
+.flag{
+    width: 100px;
+    height: 100%;
+    object-fit: cover;
+}
+
+.username{
+    padding-top: 20px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.classify-container{
+    display: flex;
+}

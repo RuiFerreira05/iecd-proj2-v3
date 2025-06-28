@@ -1,0 +1,146 @@
+@font-face {
+    font-family: "VT323";
+    src: url("../fonts/VT323-Regular.ttf") format("truetype");
+}
+
+body, html{
+    height: 100%;
+}
+
+body{
+    font-family: "VT323", monospace;
+    font-weight: 400;
+    font-style: normal;
+    background-image: url(../images/Background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.photo-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 50px;
+}
+
+.frame{
+    width: 80px;
+    height: 100px;
+    background-color: #f9cd88;
+    border-style: solid;
+    border-width: 30px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+}
+
+.photo-frame{
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.label{
+    margin-inline: 20px;
+    font-size: 25px;
+}
+
+.profile-text-input{
+    background-color: #f9cd88;
+    border-style: solid;
+    border-width: 8px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+}
+
+.profile-info-section{
+    display: flex;
+    justify-content: center;
+}
+
+.profile-container{
+    display: grid;
+    width: 80%;
+    place-items: center;
+    margin-top: 50px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: 100px;
+    column-gap: 30px;
+}
+
+
+.profile-color-input{
+    height: 40px;
+    background-color: #f9cd88;
+    border-style: solid;
+    border-width: 7px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+}
+
+.button-container{
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-input{
+    height: 50px;
+    width: 100px;
+    margin-inline: 50px;
+    background-color: #f9cd88;
+    border-style: solid;
+    border-width: 10px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+    font-size: 30px;
+    font-family: "VT323", monospace;
+    cursor: pointer;
+}
+
+.edit-photo-button{
+    position: absolute;
+    left: 55%;
+    background-color: #f9cd88;
+    border-style: solid;
+    border-color: #cf7136;
+    border-width: 3px;
+    color: #8b402f;
+}
+
+.file-chooser{
+    display: none;
+}
+
+.game-times-container{
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+.game-times-select{
+    background-color: #f9cd88;
+    width: 250px;
+    height: 30px;
+    background-color: #f9cd88;
+    border-style: solid;
+    border-width: 7px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+}
+
+.nationality-selector{
+    background-color: #f9cd88;
+    width: 180px;
+    height: 35px;
+    background-color: #f9cd88;
+    border-style: solid;
+    border-width: 7px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+}
+
