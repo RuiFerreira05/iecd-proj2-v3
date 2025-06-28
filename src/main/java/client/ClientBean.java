@@ -70,6 +70,27 @@ public class ClientBean {
 		}
 	}
 	
+	public boolean register(String user, String pass, String nationality, int age, String photo, String color) {
+		if (!isConnected) {
+	        return false;
+	    }
+	    writer.println("register " + user + " " + pass + " " + nationality + " " + age + " " + photo + " " + color);
+
+	    try {
+	        String response = reader.readLine();
+	        if (response.equals("valid")) {
+	            this.username = user;
+	            this.isLoggedIn = false;
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    } catch (IOException e) {
+	        System.err.println("Erro durante registo: " + e.getMessage());
+	        return false;
+	    }
+	}
+	
 	public boolean logout() {
 		if (!isConnected || !isLoggedIn) {
 			return false;
