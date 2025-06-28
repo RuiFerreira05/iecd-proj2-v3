@@ -22,7 +22,7 @@
 	        }
 	    }
     
-	    if (!client.isConnected()) {
+	    if (!client.isConnected() || !client.isLoggedIn()) {
 	    	response.sendRedirect("index.jsp");
 	    }
 	    

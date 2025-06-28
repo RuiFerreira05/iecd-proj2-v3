@@ -1,4 +1,16 @@
 function main() {
+	
+    const canvas = document.getElementById("board-canvas");
+	const ctx = canvas.getContext('2d');
+	
+	drawBoardLines(canvas);
+	
+	
+}
+
+
+
+function main() {
     
     const canvas= document.getElementById("board-canvas");
     const ctx = canvas.getContext('2d');

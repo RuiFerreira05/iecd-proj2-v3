@@ -34,10 +34,14 @@
     <div class="initial-container">
         <h1 class="initial-title">Welcome to GoBang!</h1>
         <h2 class="initial-subtitle"><%= client.isConnected() ? "Choose an option below" : "It seems the server is currently offline, sorry!" %></h2>
+        <% if (request.getParameter("matchmake_error") != null) { %>
+        	<h2 class="initial-subtitle">A matchmaking error has occurred, we're sorry!</h2>	
+        <% }
+        %>
         <div class="btn-group">
 			<%  if (client.isConnected()) { 
 				    if (client.isLoggedIn()) {
-			%>
+			%>			            
 				        <a href="matchmaking.jsp"><button>Play</button></a>
 				        <a href="logout.jsp"><button>Logout</button></a>
 				        <a href="profile.jsp"><button>Change profile</button></a>

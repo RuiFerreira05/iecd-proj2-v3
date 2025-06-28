@@ -13,6 +13,7 @@ public class ClientBean {
 	private String username = null;
 	private boolean isConnected = false;
 	private boolean isLoggedIn = false;
+	private boolean isMatchmaking = false;
 	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
@@ -133,6 +134,27 @@ public class ClientBean {
 		}
 	}
 	
+	public boolean matchmake() {
+		if (!isConnected || !isLoggedIn) {
+			return false;
+		}
+		if (isMatchmaking) {
+			return false; // Already matchmaking
+		}
+		writer.println("matchmake");
+		try {
+			String response = reader.readLine();
+			if (response.equals("valid")) {
+				isMatchmaking = true;
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			System.out.println("Something went wrong with matchmake: " + e.getMessage());
+			return false;
+		}
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}
@@ -156,6 +178,10 @@ public class ClientBean {
 	
 	public boolean isLoggedIn() {
 		return isLoggedIn;
+	}
+	
+	public boolean isMatchmaking() {
+		return isMatchmaking;
 	}
 	
 	public BufferedReader getReader() {
