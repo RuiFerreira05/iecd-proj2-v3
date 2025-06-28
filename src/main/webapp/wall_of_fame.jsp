@@ -13,18 +13,26 @@
 
 <%  if (session.getAttribute("client") == null) {
     		response.sendRedirect("index.jsp");
-	    } else {
-	    	client = (ClientBean) session.getAttribute("client");
-	    	if (!client.getUuid().equals(session.getId())) {
-	    		response.sendRedirect("index.jsp");
-	        }
-	    }
-    
-	    if (!client.isConnected()) {
+	} else {
+	    client = (ClientBean) session.getAttribute("client");
+	    if (!client.getUuid().equals(session.getId())) {
 	    	response.sendRedirect("index.jsp");
 	    }
+	}
+    
+	if (!client.isConnected()) {
+	    response.sendRedirect("index.jsp");
+	}
 	    
-	    String[] walloffame = client.getWof();
+	String[] walloffame = client.getWof();
+	
+	length_wall= 0;
+	for(int i=0; i < walloffame.length; i++){
+        if(walloffame[i] != null){
+            length_wall += 1;
+            System.out.println(length_wall);
+        }
+    }
 	    
 	%>
 
@@ -50,11 +58,6 @@
                         <div class="place"> 1 </div>
                         <div class="photo-place">
                             <% 
-                                for(int i=0; i < walloffame.length; i++){
-                                    if(walloffame[i] != null){
-                                        length_wall += 1;
-                                    }
-                                }
                                 if(length_wall >= 3){
                                     image= walloffame[0];
                                 }
@@ -194,6 +197,7 @@
                     <%
                         if(length_wall == 15){
                             name= walloffame[13];
+                            System.out.println("mimimi");
                         }
                         else{
                             name= "Undefined";
