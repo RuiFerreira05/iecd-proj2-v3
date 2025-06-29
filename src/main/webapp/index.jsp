@@ -42,7 +42,7 @@
 			<%  if (client.isConnected()) { 
 				    if (client.isLoggedIn()) {
 			%>			            
-				        <a href="matchmaking.jsp"><button>Play</button></a>
+				        <a href="matchmaking.jsp" <%= client.isMatchmaking() ? "disabled" : "" %>><button>Play</button></a>
 				        <a href="logout.jsp"><button>Logout</button></a>
 				        <a href="profile.jsp"><button>Change profile</button></a>
 				        <a href="wall_of_fame.jsp"><button>Wall of fame</button></a>

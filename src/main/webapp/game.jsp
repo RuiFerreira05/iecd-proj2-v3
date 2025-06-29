@@ -1,3 +1,36 @@
+<%@ page 	language="java" 
+			contentType="text/html; charset=UTF-8" 
+			pageEncoding="UTF-8" 
+%>
+<%@ page import="client.ClientBean" %>
+
+<%! private ClientBean client = null; %>
+<%! private String playerNum = null; %>
+<%! private String opponentUsername = null; %>
+<%! private boolean yt = false; %>
+<%! private String board = null; %>
+
+<%  if (session.getAttribute("client") == null) {
+        client = new ClientBean(session.getId());
+        session.setAttribute("client", client);
+    } else {
+        client = (ClientBean) session.getAttribute("client");
+        if (!client.getUuid().equals(session.getId())) {
+        	client = new ClientBean(session.getId());
+        	session.setAttribute("client", client);
+        }
+    }
+	
+	if (!client.isPlaying()) {
+		response.sendRedirect("index.jsp");
+	}
+	
+	playerNum = client.getPlayerNum();
+	opponentUsername = client.getOpponentUsername();
+	yt = client.isYt();
+	board = client.getBoard();
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +41,8 @@
     <link rel="stylesheet" href="static/css/game.css" />
     <style>
         body {
-            background: <%= session.getAttribute("playerColor") != null ? session.getAttribute("playerColor") : "#FFFFFF" %>;
+            <%--background: <%= client.getdata(client.getUsername())[3] %>;--%>
+            background: #ffffff;
         }
     </style>
     <script type="module" src="static/js/game.js"></script>
@@ -27,6 +61,12 @@
     <section class="options-section">
         <div class="button-container">
             <a href="index.jsp"><button type="button" class="button-exit">Exit</button></a>
+        </div>
+        <div>
+            <%= playerNum %>
+            <%= opponentUsername %>
+            <%= yt %>
+            <%= board %>
         </div>
     </section>
 </body>
