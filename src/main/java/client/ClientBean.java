@@ -70,7 +70,7 @@ public class ClientBean {
 		}
 	}
 	
-	public boolean register(String user, String pass, String nationality, int age, String photo, String color) {
+	public boolean register(String user, String pass, String nationality, String age, String photo, String color) {
 		if (!isConnected) {
 	        return false;
 	    }
@@ -86,7 +86,7 @@ public class ClientBean {
 	            return false;
 	        }
 	    } catch (IOException e) {
-	        System.err.println("Erro durante registo: " + e.getMessage());
+	        System.err.println("Something went wrong with register: " + e.getMessage());
 	        return false;
 	    }
 	}
