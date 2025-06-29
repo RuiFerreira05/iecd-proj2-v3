@@ -46,11 +46,11 @@
 				        <a href="logout.jsp"><button>Logout</button></a>
 				        <a href="profile.jsp"><button>Change profile</button></a>
 				        <a href="wall_of_fame.jsp"><button>Wall of fame</button></a>
-				        <a href="search_player.html"><button>Search player</button></a>
+				        <a href="search_player.jsp"><button>Search player</button></a>
 			<%		} else {  	 %>
 				        <a href="login.jsp"><button>Login</button></a>
 				        <a href="wall_of_fame.jsp"><button>Wall of fame</button></a>
-				        <a href="search_player.html"><button>Search player</button></a>
+				        <a href="search_player.jsp"><button>Search player</button></a>
 			<%		}
 			   	} else { 
 			%>

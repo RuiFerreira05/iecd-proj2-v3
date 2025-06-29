@@ -71,6 +71,27 @@ public class ClientBean {
 		}
 	}
 	
+	public boolean register(String user, String pass, String nationality, String age, String photo, String color) {
+		if (!isConnected) {
+	        return false;
+	    }
+	    writer.println("register " + user + " " + pass + " " + nationality + " " + age + " " + photo + " " + color);
+
+	    try {
+	        String response = reader.readLine();
+	        if (response.equals("valid")) {
+	            this.username = user;
+	            this.isLoggedIn = false;
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    } catch (IOException e) {
+	        System.err.println("Something went wrong with register: " + e.getMessage());
+	        return false;
+	    }
+	}
+	
 	public boolean logout() {
 		if (!isConnected || !isLoggedIn) {
 			return false;
@@ -91,7 +112,7 @@ public class ClientBean {
 	}
 	
 	public String[] getdata(String username) {
-		if (!isConnected || !isLoggedIn) {
+		if (!isConnected) {
 			return null;
 		}
 		String[] data = new String[8];

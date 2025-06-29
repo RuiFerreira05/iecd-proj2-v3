@@ -66,7 +66,7 @@
             <div>
                 <div class="session-title"> Create account </div>
                 <div class="login-button-container">
-                    <a href="profile.jsp"><button class="login-button">Register</button></a>
+                    <a href="register.jsp"><button class="login-button">Register</button></a>
                 </div>
             </div>
         </div>
