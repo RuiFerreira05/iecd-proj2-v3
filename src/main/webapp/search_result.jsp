@@ -108,9 +108,6 @@
         </section>
         <div class="button-container">
             <a href="index.jsp">
-                <input type="submit" class="button-input" value="Submit">
-            </a>
-            <a href="index.jsp">
                 <input type="button" class="button-input" value="Exit">
             </a>
         </div>  
