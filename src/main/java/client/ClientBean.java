@@ -176,7 +176,7 @@ public class ClientBean {
 		}
 		writer.println("change "+ type + " " + changeValue);
 		try {
-			String response = reader.readLine();
+			String response = messageQueue.take();
 			String[] parts = response.split(" ");
 			if (parts[0].equals("valid")) {
 				return true;
