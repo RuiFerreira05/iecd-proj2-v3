@@ -192,7 +192,15 @@ public class ClientBean {
 		if (isConnected == false) {
 			return false;
 		} else {
-			isConnected = checkStatus();
+			if (!checkStatus()) {
+				username = null;
+				isConnected = false;
+				isLoggedIn = false;
+				isMatchmaking = false;
+				reader = null;
+				writer = null;
+				socket = null;
+			}
 			return isConnected;
 		}
 	}
