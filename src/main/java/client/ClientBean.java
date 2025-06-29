@@ -11,6 +11,7 @@ public class ClientBean {
 	private final String uuid;
 	
 	private String username = null;
+	private String pass= null;
 	private boolean isConnected = false;
 	private boolean isLoggedIn = false;
 	
@@ -60,6 +61,7 @@ public class ClientBean {
 			String response = reader.readLine();
 			if (response.equals("valid")) {
 				this.username = user;
+				this.pass= pass;
 				this.isLoggedIn = true;
 				return true;
 			}
@@ -132,6 +134,24 @@ public class ClientBean {
 		}
 	}
 	
+	public boolean changeData(String type, String changeValue) {
+		if (!isConnected || !isLoggedIn) {
+			return false;
+		}
+		writer.println("change "+ type + " " + changeValue);
+		try {
+			String response = reader.readLine();
+			String[] parts = response.split(" ");
+			if (parts[0].equals("valid")) {
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			System.out.println("Something went wrong with changedata: " + e.getMessage());
+			return false;
+		}
+	}
+	
 	public String[] getWof() {
 		if (!isConnected) {
 			return null;
@@ -160,6 +180,14 @@ public class ClientBean {
 	
 	public String getUsername() {
 		return username;
+	}
+	
+	public String getPass() {
+		return pass;
+	}
+	
+	public void setPass(String pass) {
+		this.pass= pass;
 	}
 	
 	public void setUsername(String username) {
