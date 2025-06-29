@@ -111,7 +111,7 @@ public class ClientBean {
 	}
 	
 	public String[] getdata(String username) {
-		if (!isConnected || !isLoggedIn) {
+		if (!isConnected) {
 			return null;
 		}
 		String[] data = new String[8];
