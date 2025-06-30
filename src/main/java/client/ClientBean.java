@@ -28,6 +28,7 @@ public class ClientBean {
 	private String opponentUsername = null;
 	private boolean yt = false;
 	private String board = null;
+	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
 	private int serverPort = 3004;
@@ -60,6 +61,8 @@ public class ClientBean {
 								yt = false;
 							}
 						} else if (parts[0].equals("board")) {
+							System.out.println("board updated:\n" + message);
+							boardChanged = true;
 							board = parts[1];
 						} else {
 							messageQueue.put(message);
@@ -86,6 +89,10 @@ public class ClientBean {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public String checkOppoMove() {
+		return messageQueue.poll();
 	}
 	
 	public boolean login(String user, String pass) {
@@ -145,6 +152,20 @@ public class ClientBean {
 		} catch (Exception e) {
 			System.out.println("Something went wrong with logout: " + e.getMessage());
 			return false;
+		}
+	}
+	
+	public String move(int x, int y) {
+		if (!isConnected || !isLoggedIn || !isPlaying || !yt) {
+			return null;
+		}
+		yt = false;
+		writer.println("mv " + x + " " + y);
+		try {
+			return messageQueue.take();
+		} catch (Exception e) {
+			System.out.println("Something went wrong with move: " + e.getMessage());
+			return null;
 		}
 	}
 	
@@ -295,12 +316,21 @@ public class ClientBean {
 		return yt;
 	}
 	
+	public void setYt(boolean yt) {
+		this.yt = yt;
+	}
+	
 	public String getBoard() {
+		boardChanged = false;
 		return board;
 	}
 	
 	public void setBoard(String board) {
 		this.board = board;
+	}
+	
+	public boolean isBoardChanged() {
+		return boardChanged;
 	}
 	
 	public BufferedReader getReader() {
