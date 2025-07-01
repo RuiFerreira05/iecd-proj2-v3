@@ -55,5 +55,12 @@
     });
 </script>
 <body>
-	Matchmaking...
+    <h2>Matchmaking...</h2>
+    <div class="loading-text">Please wait while we find an opponent for you.</div>
+    <div class="dot-spinner">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
 </body>
