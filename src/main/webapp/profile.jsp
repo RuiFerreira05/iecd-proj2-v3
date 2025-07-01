@@ -75,7 +75,7 @@
         <section class="profile-info-section">
             <div class="profile-container">
                 <div>
-                    <label for="name" class="label"> <%= client.getXmlNat().length() %> </label>
+                    <label for="name" class="label"> name </label>
                     <input class="profile-text-input" id="name" type="text" value="<%= username %>" name="username" required/>
                 </div>
                 <div>

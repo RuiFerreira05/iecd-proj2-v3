@@ -57,10 +57,6 @@
 					<a href="index.jsp"><button>Reconnect</button></a>
 			<%  } %>
         </div>
-        <div>
-        	<div><%= client.isConnected() ? "Connected to server" : "Not connected to server" %></div>
-        	<div><%= client.getUuid() %></div>
-        </div>
     </div>
     <div class="footer">
         <p>&copy; 2025 GoBang - MMR. All rights reserved.</p>

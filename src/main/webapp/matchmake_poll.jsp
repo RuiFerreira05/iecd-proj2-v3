@@ -6,13 +6,11 @@
 <%! private ClientBean client = null; %>
 
 <%  if (session.getAttribute("client") == null) {
-        client = new ClientBean(session.getId());
-        session.setAttribute("client", client);
+	    response.sendRedirect("index.jsp");
     } else {
         client = (ClientBean) session.getAttribute("client");
         if (!client.getUuid().equals(session.getId())) {
-        	client = new ClientBean(session.getId());
-        	session.setAttribute("client", client);
+        	response.sendRedirect("index.jsp");
         }
     }
 
