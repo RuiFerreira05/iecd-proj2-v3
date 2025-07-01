@@ -70,11 +70,11 @@ public class ClientBean {
 		}
 	}
 	
-	public boolean register(String user, String pass, String nationality, String age, String photo, String color) {
+	public boolean register(String user, String pass, String nationality, String age, String favcolor, String profilePicture) {
 		if (!isConnected) {
 	        return false;
 	    }
-	    writer.println("register " + user + " " + pass + " " + nationality + " " + age + " " + photo + " " + color);
+	    writer.println("register " + user + " " + pass + " " + nationality + " " + age + " " + favcolor + " " + profilePicture);
 
 	    try {
 	        String response = reader.readLine();
