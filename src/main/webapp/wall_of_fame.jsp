@@ -30,7 +30,6 @@
 	for(int i=0; i < walloffame.length; i++){
         if(walloffame[i] != null){
             length_wall += 1;
-            System.out.println(length_wall);
         }
     }
 	    
@@ -197,7 +196,6 @@
                     <%
                         if(length_wall == 15){
                             name= walloffame[13];
-                            System.out.println("mimimi");
                         }
                         else{
                             name= "Undefined";
