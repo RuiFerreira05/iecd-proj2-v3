@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+
+
 public class ClientBean {
 	
 	private final String uuid;
@@ -17,6 +19,7 @@ public class ClientBean {
 	private boolean isLoggedIn = false;
 	private boolean isMatchmaking = false;
 	private boolean isPlaying = false;
+	private boolean end;
 	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
@@ -28,6 +31,7 @@ public class ClientBean {
 	private String opponentUsername = null;
 	private boolean yt = false;
 	private String board = null;
+	public String xmlNat;
 	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
@@ -35,6 +39,8 @@ public class ClientBean {
 	
 	public ClientBean(String uuid) {
 		this.uuid = uuid;
+		this.xmlNat= "";
+		this.end= true;
 		connect();
 	}
 	
@@ -50,6 +56,7 @@ public class ClientBean {
 					try {
 						String message = reader.readLine();
 						String parts[] = message.split(" ");
+						//System.out.println(parts[0]);
 						if (parts[0].equals("gs")) {
 							isPlaying = true;
 							isMatchmaking = false;
@@ -64,14 +71,23 @@ public class ClientBean {
 							System.out.println("board updated:\n" + message);
 							boardChanged = true;
 							board = parts[1];
-						} else {
+						} else if(parts[0].equals("foundXML") || !end) {
+							end= false;
+							xmlNat += message;
+							if(message.contains("end")) {
+								end= true;
+							}
+						}else {
+							System.out.println("wtf");
 							messageQueue.put(message);
 						}
 					} catch (Exception e) {
 						System.out.println("Error reading from server: " + e.getMessage());
 						isConnected = false;
 					}
+					System.out.println(xmlNat);
 				}
+				System.out.println(xmlNat);
 			}).start();
 			return true;
 		} catch (Exception e) {
@@ -101,6 +117,7 @@ public class ClientBean {
 		}
 		writer.println("login " + user + " " + pass);
 		try {
+			System.out.println(messageQueue.size());
 			String response = messageQueue.take();
 			if (response.equals("valid")) {
 				this.username = user;
@@ -177,6 +194,7 @@ public class ClientBean {
 		writer.println("getdata " + username);
 		try {
 			String response = messageQueue.take();
+			//System.out.println(response);
 			String[] parts = response.split(" ");
 			if (parts[0].equals("found")) {
 				for (int i = 1; i < parts.length; i++) {
@@ -230,6 +248,29 @@ public class ClientBean {
 			return null;
 		}
 	}
+	
+	public void getNationalities() {
+		if (isConnected) {
+			writer.println("getXML nationalities");
+		}
+		
+		/*try {
+			//String response= xmlNat;
+			//String response = messageQueue.take();
+			System.out.println(response);
+			//System.out.print("Response: "+ response);
+			System.out.println(response);
+			String[] parts = response.split(" ");
+			if (parts[0].equals("found")) {
+				return response;
+			}
+			return null;
+		} catch (Exception e) {
+			System.out.println("Something went wrong with getNationalities: " + e.getMessage());
+			return null;
+		}*/
+	}
+	
 	
 	public boolean matchmake() {
 		if (!isConnected || !isLoggedIn) {
@@ -349,4 +390,8 @@ public class ClientBean {
 		this.writer = writer;
 	}
 
+	public String getNats() {
+		System.out.println(this.xmlNat);
+		return this.xmlNat;
+	}
 }

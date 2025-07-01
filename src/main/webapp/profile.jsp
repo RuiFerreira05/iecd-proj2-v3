@@ -2,6 +2,7 @@
 			contentType="text/html; charset=UTF-8"
     		pageEncoding="UTF-8"%>
 <%@page import="client.ClientBean"%>
+<%@page import="org.w3c.dom.Document"%>
 
 	<%! private ClientBean client = null; %>
 	<%! public String username= ""; %>
@@ -13,6 +14,7 @@
     <%! public String victories= ""; %>
     <%! public String defeats= ""; %>
     <%! public String games_played= ""; %>
+    <%! public String natsxml= ""; %>
     
     <%  if (session.getAttribute("client") == null) {
     		response.sendRedirect("index.jsp");
@@ -28,7 +30,7 @@
 	    }
 	    
 	    String[] data = client.getdata(client.getUsername());
-	    
+	    //System.out.println(data);
 	    username = data[0];
 	    nationality = data[1];
 	    age = data[2];
@@ -38,6 +40,12 @@
 	    defeats = data[6];
 	    games_played = data[7];
 	    pass= client.getPass();
+	    
+	    client.getNationalities();
+	    client.getNats();
+
+		System.out.println("Nats: " + client.getNats());
+	    
 	%>
 
 <!DOCTYPE html>
