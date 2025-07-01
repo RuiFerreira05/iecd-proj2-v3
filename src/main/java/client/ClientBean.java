@@ -19,7 +19,7 @@ public class ClientBean {
 	private boolean isLoggedIn = false;
 	private boolean isMatchmaking = false;
 	private boolean isPlaying = false;
-	private boolean end;
+	private boolean end = true;
 	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
@@ -31,7 +31,7 @@ public class ClientBean {
 	private String opponentUsername = null;
 	private boolean yt = false;
 	private String board = null;
-	public String xmlNat;
+	public String xmlNat = "";
 	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
@@ -39,8 +39,6 @@ public class ClientBean {
 	
 	public ClientBean(String uuid) {
 		this.uuid = uuid;
-		this.xmlNat= "";
-		this.end= true;
 		connect();
 	}
 	
@@ -68,7 +66,6 @@ public class ClientBean {
 								yt = false;
 							}
 						} else if (parts[0].equals("board")) {
-							System.out.println("board updated:\n" + message);
 							boardChanged = true;
 							board = parts[1];
 						} else if(parts[0].equals("foundXML") || !end) {
@@ -76,18 +73,16 @@ public class ClientBean {
 							xmlNat += message;
 							if(message.contains("end")) {
 								end= true;
+								messageQueue.put(xmlNat);
 							}
-						}else {
-							System.out.println("wtf");
+						} else {
 							messageQueue.put(message);
 						}
 					} catch (Exception e) {
 						System.out.println("Error reading from server: " + e.getMessage());
 						isConnected = false;
 					}
-					System.out.println(xmlNat);
 				}
-				System.out.println(xmlNat);
 			}).start();
 			return true;
 		} catch (Exception e) {
@@ -249,8 +244,10 @@ public class ClientBean {
 		}
 	}
 	
-	public void getNationalities() {
+	public void updateNationalities() {
 		if (isConnected) {
+			xmlNat = "";
+			end = true;
 			writer.println("getXML nationalities");
 		}
 		
@@ -389,9 +386,17 @@ public class ClientBean {
 	public void setWriter(PrintWriter writer) {
 		this.writer = writer;
 	}
-
-	public String getNats() {
-		System.out.println(this.xmlNat);
-		return this.xmlNat;
+	
+	public String getXmlNat() {
+		try {
+			if (xmlNat.isEmpty()) {
+				updateNationalities();
+				return messageQueue.take();
+			} else {
+				return xmlNat;
+			}
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
