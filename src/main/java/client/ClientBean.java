@@ -1,22 +1,34 @@
 package client;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class ClientBean {
 	
 	private final String uuid;
 	
 	private String username = null;
+	private String pass= null;
 	private boolean isConnected = false;
 	private boolean isLoggedIn = false;
+	private boolean isMatchmaking = false;
+	private boolean isPlaying = false;
 	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
 	private Socket socket = null;
+	
+	private BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
+	
+	private String playerNum = null;
+	private String opponentUsername = null;
+	private boolean yt = false;
+	private String board = null;
+	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
 	private int serverPort = 3004;
@@ -33,6 +45,34 @@ public class ClientBean {
 			writer = new PrintWriter(socket.getOutputStream(), true);
 			System.out.println("Connected to server at " + serverIP + ":" + serverPort);
 			isConnected = true;
+			new Thread(() -> {
+				while (isConnected) {
+					try {
+						String message = reader.readLine();
+						String parts[] = message.split(" ");
+						if (parts[0].equals("gs")) {
+							isPlaying = true;
+							isMatchmaking = false;
+							playerNum = parts[1];
+							opponentUsername = parts[2];
+							if (parts.length == 4) {
+								yt = true;
+							} else {
+								yt = false;
+							}
+						} else if (parts[0].equals("board")) {
+							System.out.println("board updated:\n" + message);
+							boardChanged = true;
+							board = parts[1];
+						} else {
+							messageQueue.put(message);
+						}
+					} catch (Exception e) {
+						System.out.println("Error reading from server: " + e.getMessage());
+						isConnected = false;
+					}
+				}
+			}).start();
 			return true;
 		} catch (Exception e) {
 			System.err.println("Error connecting to server: '" + e.getMessage() + "'");
@@ -44,11 +84,15 @@ public class ClientBean {
 	public boolean checkStatus() {
 		writer.println("status");
 		try {
-			reader.readLine();
+			messageQueue.take();
 			return true;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public String checkOppoMove() {
+		return messageQueue.poll();
 	}
 	
 	public boolean login(String user, String pass) {
@@ -57,9 +101,10 @@ public class ClientBean {
 		}
 		writer.println("login " + user + " " + pass);
 		try {
-			String response = reader.readLine();
+			String response = messageQueue.take();
 			if (response.equals("valid")) {
 				this.username = user;
+				this.pass= pass;
 				this.isLoggedIn = true;
 				return true;
 			}
@@ -77,7 +122,7 @@ public class ClientBean {
 	    writer.println("register " + user + " " + pass + " " + nationality + " " + age + " " + favcolor + " " + profilePicture);
 
 	    try {
-	        String response = reader.readLine();
+	        String response = messageQueue.take();
 	        if (response.equals("valid")) {
 	            this.username = user;
 	            this.isLoggedIn = false;
@@ -85,7 +130,7 @@ public class ClientBean {
 	        } else {
 	            return false;
 	        }
-	    } catch (IOException e) {
+	    } catch (Exception e) {
 	        System.err.println("Something went wrong with register: " + e.getMessage());
 	        return false;
 	    }
@@ -97,7 +142,7 @@ public class ClientBean {
 		}
 		writer.println("logout");
 		try {
-			String response = reader.readLine();
+			String response = messageQueue.take();
 			if (response.equals("valid")) {
 				this.isLoggedIn = false;
 				this.username = null;
@@ -110,6 +155,20 @@ public class ClientBean {
 		}
 	}
 	
+	public String move(int x, int y) {
+		if (!isConnected || !isLoggedIn || !isPlaying || !yt) {
+			return null;
+		}
+		yt = false;
+		writer.println("mv " + x + " " + y);
+		try {
+			return messageQueue.take();
+		} catch (Exception e) {
+			System.out.println("Something went wrong with move: " + e.getMessage());
+			return null;
+		}
+	}
+	
 	public String[] getdata(String username) {
 		if (!isConnected) {
 			return null;
@@ -117,7 +176,7 @@ public class ClientBean {
 		String[] data = new String[8];
 		writer.println("getdata " + username);
 		try {
-			String response = reader.readLine();
+			String response = messageQueue.take();
 			String[] parts = response.split(" ");
 			if (parts[0].equals("found")) {
 				for (int i = 1; i < parts.length; i++) {
@@ -132,6 +191,24 @@ public class ClientBean {
 		}
 	}
 	
+	public boolean changeData(String type, String changeValue) {
+		if (!isConnected || !isLoggedIn) {
+			return false;
+		}
+		writer.println("change "+ type + " " + changeValue);
+		try {
+			String response = messageQueue.take();
+			String[] parts = response.split(" ");
+			if (parts[0].equals("valid")) {
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			System.out.println("Something went wrong with changedata: " + e.getMessage());
+			return false;
+		}
+	}
+	
 	public String[] getWof() {
 		if (!isConnected) {
 			return null;
@@ -139,7 +216,7 @@ public class ClientBean {
 		String[] wofData = new String[15];
 		writer.println("getXML walloffame");
 		try {
-			String response = reader.readLine();
+			String response = messageQueue.take();
 			String[] parts = response.split(" ");
 			if (parts[0].equals("found")) {
 				for (int i = 1; i < parts.length; i++) {
@@ -154,12 +231,40 @@ public class ClientBean {
 		}
 	}
 	
+	public boolean matchmake() {
+		if (!isConnected || !isLoggedIn) {
+			return false;
+		}
+		if (isMatchmaking) {
+			return false; // Already matchmaking
+		}
+		writer.println("matchmake");
+		try {
+			String answer = messageQueue.take();
+			if (answer.equals("valid")) {
+				isMatchmaking = true;
+			}
+			return isMatchmaking;
+		} catch (Exception e) {
+			System.out.println("Something went wrong with matchmake: " + e.getMessage());
+			return false;
+		}
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}
 	
 	public String getUsername() {
 		return username;
+	}
+	
+	public String getPass() {
+		return pass;
+	}
+	
+	public void setPass(String pass) {
+		this.pass= pass;
 	}
 	
 	public void setUsername(String username) {
@@ -170,13 +275,62 @@ public class ClientBean {
 		if (isConnected == false) {
 			return false;
 		} else {
-			isConnected = checkStatus();
+			if (!checkStatus()) {
+				username = null;
+				isConnected = false;
+				isLoggedIn = false;
+				isMatchmaking = false;
+				reader = null;
+				writer = null;
+				socket = null;
+			}
 			return isConnected;
 		}
 	}
 	
 	public boolean isLoggedIn() {
 		return isLoggedIn;
+	}
+	
+	public boolean isMatchmaking() {
+		return isMatchmaking;
+	}
+	
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+	
+	public void setPlaying(boolean isPlaying) {
+		this.isPlaying = isPlaying;
+	}
+	
+	public String getPlayerNum() {
+		return playerNum;
+	}
+	
+	public String getOpponentUsername() {
+		return opponentUsername;
+	}
+	
+	public boolean isYt() {
+		return yt;
+	}
+	
+	public void setYt(boolean yt) {
+		this.yt = yt;
+	}
+	
+	public String getBoard() {
+		boardChanged = false;
+		return board;
+	}
+	
+	public void setBoard(String board) {
+		this.board = board;
+	}
+	
+	public boolean isBoardChanged() {
+		return boardChanged;
 	}
 	
 	public BufferedReader getReader() {
