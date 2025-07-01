@@ -45,7 +45,6 @@
             background: #ffffff;
         }
     </style>
-    <script type="module" src="static/js/game.js"></script>
 </head>
 <body>
     <section class="title-section">
@@ -62,12 +61,10 @@
         <div class="button-container">
             <a href="index.jsp"><button type="button" class="button-exit">Exit</button></a>
         </div>
-        <div>
-            <%= playerNum %>
-            <%= opponentUsername %>
-            <%= yt %>
-            <%= board %>
-        </div>
     </section>
 </body>
+<script src="static/js/game.js"></script>
+<script>
+	new Game(<%=board%>, <%=yt%>)
+</script>
 </html>

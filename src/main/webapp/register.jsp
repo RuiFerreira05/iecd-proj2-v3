@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Base64" %>
-<%@ page import="java.io.InputStream" %>
-<%@ page import="java.io.ByteArrayOutputStream" %>
 <%@ page import="client.ClientBean" %>
-<%@ page import="jakarta.servlet.http.Part" %>
 <%@ page import="java.io.IOException" %>
+<%@ page import="java.io.InputStream" %>
+<%@ page import="jakarta.servlet.http.Part" %>
 
 <%! private ClientBean client = null; %>
 
@@ -29,10 +28,11 @@
 <head>
     <meta charset="UTF-8">
     <title>GoBang Registo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="static/css/register.css" />
 </head>
 <body>
-    <form name="profileForm" method="POST" enctype="multipart/form-data">
+    <form name="profileForm" action="register.jsp" method="post" enctype="multipart/form-data">
         <section class="photo-section">
             <div class="photo-container">
                 <div class="frame">
@@ -65,14 +65,12 @@
                 </div>
                 <div class="favColor-container">
                     <label for="favColor" class="label"> Favourite color</label>
-                    <input type="color" id="favColor" class="profile-color-input" name="color" value="#00000">
+                    <input type="color" id="favColor" class="profile-color-input" name="color" value="#000000" required>
                 </div>
             </div>
         </section>
         <div class="button-container">
-            <a href="index.jsp">
-                <input type="submit" class="button-input" value="Submit">
-            </a>
+            <input type="submit" class="button-input" value="Submit">
             <a href="index.jsp">
                 <input type="button" class="button-input" value="Exit">
             </a>
@@ -80,39 +78,35 @@
     </form>
     
 	<%
-	    if ("POST".equalsIgnoreCase(request.getMethod())) {
-	        String user = request.getParameter("user");
-	        String pass = request.getParameter("pass");
-	        String nationality = request.getParameter("nationality");
-	        String age = request.getParameter("age");
-	        String favcolor = request.getParameter("color");
-	
-	        String profilePicture = "default";
-	        Part part = request.getPart("photo");
-	
-	        if (part != null && part.getSize() > 0) {
-	            try (InputStream in = part.getInputStream();
-	                 ByteArrayOutputStream outBytes = new ByteArrayOutputStream()) {
-	                byte[] buffer = new byte[4096];
-	                int len;
-	                while ((len = in.read(buffer)) != -1) {
-	                    outBytes.write(buffer, 0, len);
-	                }
-	                profilePicture = Base64.getEncoder().encodeToString(outBytes.toByteArray());
-	            } catch (IOException e) {
-	                System.out.println("Error reading uploaded photo: " + e.getMessage());
-	            }
-	        }
-	
-	        boolean ok = client.register(user, pass, nationality, age, profilePicture, favcolor);
-	        if (ok) {
-	            response.sendRedirect("index.jsp");
-	            return;
-	        } else {
-	            out.println("<p class='error-message'>Error while registering, please try again.</p>");
-	        }
-	    }
-	%>
+        if ("POST".equalsIgnoreCase(request.getMethod())) {
+            String user = request.getParameter("user");
+            String pass = request.getParameter("pass");
+            String nationality = request.getParameter("nationality");
+            String age = request.getParameter("age");
+            String favcolor = request.getParameter("color");
+            
+            String profilePicture = "default";
+            Part photoPart = request.getPart("photo");
+            
+            if (photoPart != null && photoPart.getSize() > 0) {
+                try (InputStream is = photoPart.getInputStream()) {
+                    byte[] photoData = is.readAllBytes();
+                    profilePicture = Base64.getEncoder().encodeToString(photoData);
+                } catch (IOException e) {
+                    out.println("<p class='error-message'>Error reading photo: " + e.getMessage() + "</p>");
+                }
+            }
+            
+            boolean ok = client.register(user, pass, nationality, age, favcolor, profilePicture);
+            if (ok) {
+            	session.setAttribute("user", user);
+                response.sendRedirect("index.jsp");
+                return;
+            } else {
+                out.println("<p class='error-message'>Error while registing, please try again.</p>");
+            }
+        }
+    %>
 </body>
 
 <script>

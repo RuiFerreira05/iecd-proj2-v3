@@ -39,6 +39,7 @@ public class ClientBean {
 	private boolean yt = false;
 	private String board = null;
 	public String xmlNat;
+	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
 	private int serverPort = 3004;
@@ -74,6 +75,8 @@ public class ClientBean {
 								yt = false;
 							}
 						} else if (parts[0].equals("board")) {
+							System.out.println("board updated:\n" + message);
+							boardChanged = true;
 							board = parts[1];
 						} else if(parts[0].equals("foundXML") || !end) {
 							end= false;
@@ -111,6 +114,10 @@ public class ClientBean {
 		}
 	}
 	
+	public String checkOppoMove() {
+		return messageQueue.poll();
+	}
+	
 	public boolean login(String user, String pass) {
 		if (!isConnected) {
 			return false;
@@ -132,11 +139,11 @@ public class ClientBean {
 		}
 	}
 	
-	public boolean register(String user, String pass, String nationality, String age, String photo, String color) {
+	public boolean register(String user, String pass, String nationality, String age, String favcolor, String profilePicture) {
 		if (!isConnected) {
 	        return false;
 	    }
-	    writer.println("register " + user + " " + pass + " " + nationality + " " + age + " " + photo + " " + color);
+	    writer.println("register " + user + " " + pass + " " + nationality + " " + age + " " + favcolor + " " + profilePicture);
 
 	    try {
 	        String response = messageQueue.take();
@@ -169,6 +176,20 @@ public class ClientBean {
 		} catch (Exception e) {
 			System.out.println("Something went wrong with logout: " + e.getMessage());
 			return false;
+		}
+	}
+	
+	public String move(int x, int y) {
+		if (!isConnected || !isLoggedIn || !isPlaying || !yt) {
+			return null;
+		}
+		yt = false;
+		writer.println("mv " + x + " " + y);
+		try {
+			return messageQueue.take();
+		} catch (Exception e) {
+			System.out.println("Something went wrong with move: " + e.getMessage());
+			return null;
 		}
 	}
 	
@@ -343,12 +364,21 @@ public class ClientBean {
 		return yt;
 	}
 	
+	public void setYt(boolean yt) {
+		this.yt = yt;
+	}
+	
 	public String getBoard() {
+		boardChanged = false;
 		return board;
 	}
 	
 	public void setBoard(String board) {
 		this.board = board;
+	}
+	
+	public boolean isBoardChanged() {
+		return boardChanged;
 	}
 	
 	public BufferedReader getReader() {
