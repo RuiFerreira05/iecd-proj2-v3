@@ -26,7 +26,8 @@ public class ClientBean {
 	private boolean isLoggedIn = false;
 	private boolean isMatchmaking = false;
 	private boolean isPlaying = false;
-	private boolean end= true;
+	private boolean end = true;
+	private String favColor = null;
 	
 	private BufferedReader reader = null;
 	private PrintWriter writer = null;
@@ -197,6 +198,23 @@ public class ClientBean {
 		}
 	}
 	
+	public boolean surrender() {
+		if (!isConnected || !isLoggedIn || !isPlaying) {
+			return false;
+		}
+		writer.println("surrender");
+		try {
+			String messageString = messageQueue.take();			
+			if (messageString.equals("valid")) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	public String[] getdata(String username) {
 		if (!isConnected) {
 			return null;
@@ -356,6 +374,14 @@ public class ClientBean {
 	
 	public void setPlaying(boolean isPlaying) {
 		this.isPlaying = isPlaying;
+	}
+	
+	public String getFavColor() {
+		return favColor;
+	}
+	
+	public void setFavColor(String favColor) {
+		this.favColor = favColor;
 	}
 	
 	public String getPlayerNum() {
