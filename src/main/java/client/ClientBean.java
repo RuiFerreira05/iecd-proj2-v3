@@ -76,7 +76,11 @@ public class ClientBean {
 								end= true;
 								messageQueue.put(xmlNat);
 							}
+<<<<<<< HEAD
+						}else {
+=======
 						} else {
+>>>>>>> ecd9d782eee46ee196a6b32bcddaeccc230b58b7
 							messageQueue.put(message);
 						}
 					} catch (Exception e) {
@@ -130,12 +134,20 @@ public class ClientBean {
 	
 	public boolean register(String user, String pass, String nationality, String age, String favcolor, String profilePicture) {
 		if (!isConnected) {
+			System.out.println("uh oh");
 	        return false;
 	    }
+		System.out.println("user: " + user);
+		System.out.println("pass: " + pass);
+		System.out.println("nat: " + nationality);
+		System.out.println("age: " + age);
+		System.out.println("color: " + favcolor);
+		System.out.println("photo: " + profilePicture);
 	    writer.println("register " + user + " " + pass + " " + nationality + " " + age + " " + favcolor + " " + profilePicture);
 
 	    try {
 	        String response = messageQueue.take();
+	        System.out.println(response);
 	        if (response.equals("valid")) {
 	            this.username = user;
 	            this.isLoggedIn = false;
