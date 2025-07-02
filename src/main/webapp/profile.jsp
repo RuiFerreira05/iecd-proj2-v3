@@ -40,6 +40,7 @@
 	    defeats = data[6];
 	    games_played = data[7];
 	    pass= client.getPass();
+	    natsxml= client.getXmlNat();
 	%>
 
 <!DOCTYPE html>
@@ -91,12 +92,22 @@
                     <input class="profile-text-input" id="age" type="text" value="<%= age %>" name="age" required/>
                 </div>
                 <div>
+                    <%--<label for="nationality" class="label"> Nationality </label>
+                    <input class="profile-text-input" id="nationality" type="text" value="<%= nationality %>"  name="nationality" required/> --%>
                     <label for="nationality" class="label"> Nationality </label>
-                    <input class="profile-text-input" id="nationality" type="text" value="<%= nationality %>"  name="nationality" required/>
-                    <%-- <label for="nationality" class="label"> Nationality </label>
-                    <select class="nationality-selector" id="nationality" required>
-                        <option value=""> Choose nationality </option>
-                    </select> --%>
+                    <select class="nationality-selector" id="nationality" name="nationality" required>
+                        <option value="<%= nationality %>"> <%= nationality %> </option>
+                        <%
+                        	String[] nats= natsxml.split(" ");
+                    		String nati= "";
+                    		for(int i=1; i < nats.length -1; i++){
+                    			nati= nats[i];
+                    	%>
+                    	<option value="<%= nati %>"> <%= nati %> </option>
+                    	<%		
+                    		}
+                        %>
+                    </select>
                 </div>
                 <div>
                     <label for="defeats" class="label"> Defeats </label>

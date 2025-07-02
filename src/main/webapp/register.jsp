@@ -8,6 +8,7 @@
 <%@ page import="java.util.Iterator" %>
 
 <%! private ClientBean client = null; %>
+<%! public String natsxml= ""; %>
 
 <%  if (session.getAttribute("client") == null) {
         client = new ClientBean(session.getId());
@@ -23,6 +24,8 @@
 	if (!client.isConnected()) {
 		response.sendRedirect("index.jsp");
 	}
+	
+	natsxml= client.getXmlNat();
 %>
 
 <!DOCTYPE html>
@@ -64,7 +67,19 @@
                 </div>
                 <div>
                     <label for="nationality" class="label"> Nationality </label>
-                    <input class="profile-text-input" id="nationality" type="text" name="nationality" required>
+                    <select class="nationality-selector" id="nationality" name="nationality" required>
+                        <option value=""> Choose nationality </option>
+                        <%
+                        	String[] nats= natsxml.split(" ");
+                    		String nati= "";
+                    		for(int i=1; i < nats.length -1; i++){
+                    			nati= nats[i];
+                    	%>
+                    	<option value="<%= nati %>"> <%= nati %> </option>
+                    	<%		
+                    		}
+                        %>
+                    </select>
                 </div>
                 <div class="favColor-container">
                     <label for="favColor" class="label"> Favourite color</label>
