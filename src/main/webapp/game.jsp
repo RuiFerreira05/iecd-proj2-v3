@@ -47,7 +47,7 @@
 </head>
 <body>
     <section class="title-section">
-        <div class="title-container">
+        <div id="turn-display" class="title-container">
             Your Turn!
         </div>
     </section>

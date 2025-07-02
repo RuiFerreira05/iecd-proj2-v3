@@ -6,6 +6,7 @@ class Game {
 		this.player = yt ? 1 : 2;
         this.canvas = document.getElementById("board-canvas");
 		this.exitButton = document.getElementById("exit-button");
+		this.turnDisplay = document.getElementById("turn-display");
         this.ctx = this.canvas.getContext('2d');
         this.init();
     }
@@ -13,6 +14,12 @@ class Game {
 	init() {
 		this.drawBoardLines();
 		this.updateBoard();
+		
+		if (!this.yt) {
+			this.turnDisplay.innerHTML = "Opponent's turn";
+			this.checkOppoMove();
+		}
+		
 		this.canvas.addEventListener("click", (ev) => {
 			this.handleClick(ev);
         });
@@ -93,6 +100,7 @@ class Game {
                 console.log("Move response: ", data);
                 if (data.includes("vm")) {
 					this.yt = false;
+					this.turnDisplay.innerHTML = "Opponent's turn";
 					this.paintCell(x, y, this.player === 1 ? "red" : "blue");
                     this.updateBoard();
 					console.log("board updated: ", this.board);
@@ -113,6 +121,7 @@ class Game {
 				console.log("Opponent move check response: ", data);
 				if (data.includes("yt")) {
                     this.yt = true;
+					this.turnDisplay.innerHTML = "Your turn";
                     this.updateBoard();
 				} else if (data.includes("tie") || data.includes("win")) {
 					window.location.href = "match_results.jsp";
