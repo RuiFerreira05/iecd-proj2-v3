@@ -14,14 +14,26 @@
         }
     }
     
-    if (client.surrender()) {
-    	client.setPlaying(false);
-        client.setOpponentUsername(null);
-        client.setPlayerNum(null);
-        client.setYt(false);
-        client.setBoard(null);
-    	response.getOutputStream().print("valid");
-    } else {
-        response.getOutputStream().print("error");
-    }
+	if (request.getParameter("inform_server") != null) {
+		if (client.surrender()) {
+			client.setPlaying(false);
+		    client.setOpponentUsername(null);
+		    client.setPlayerNum(null);
+		    client.setYt(false);
+		    client.setBoard(null);        
+		    request.getSession().setAttribute("win", false);
+			response.getOutputStream().print("valid");
+		} else {
+		    response.getOutputStream().print("error");
+		}
+	} else {
+		client.setPlaying(false);
+	    client.setOpponentUsername(null);
+	    client.setPlayerNum(null);
+	    client.setYt(false);
+	    client.setBoard(null);
+	    request.getSession().setAttribute("win", false);
+	    response.getOutputStream().print("valid");
+	}
+	   
 %>

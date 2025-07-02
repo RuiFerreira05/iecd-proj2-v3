@@ -7,6 +7,7 @@ class Game {
         this.canvas = document.getElementById("board-canvas");
 		this.exitButton = document.getElementById("exit-button");
 		this.turnDisplay = document.getElementById("turn-display");
+		this.timerDisplay = document.getElementById("timer-display");
         this.ctx = this.canvas.getContext('2d');
         this.init();
     }
@@ -18,6 +19,8 @@ class Game {
 		if (!this.yt) {
 			this.turnDisplay.innerHTML = "Opponent's turn";
 			this.checkOppoMove();
+		} else {
+			this.startTimerThread();
 		}
 		
 		this.canvas.addEventListener("click", (ev) => {
@@ -60,13 +63,13 @@ class Game {
 	    }
 	}
 	
-	surrender() {
-		fetch("surrender.jsp")
+	surrender(inform_server = true) {
+		fetch("surrender.jsp" + (inform_server ? "?inform_server=true" : ""))
 		    .then(response => response.text())
 	        .then(data => {
 				console.log("Surrender response: ", data);
 				if (data.includes("valid")) {
-					window.location.href = "index.jsp";
+					window.location.href = "match_results.jsp";
 				} else if (data.includes("error")) {
 					alert("Error surrendering the match.");
 	            }
@@ -122,6 +125,7 @@ class Game {
 				if (data.includes("yt")) {
                     this.yt = true;
 					this.turnDisplay.innerHTML = "Your turn";
+					this.startTimerThread();
                     this.updateBoard();
 				} else if (data.includes("tie") || data.includes("win")) {
 					window.location.href = "match_results.jsp";
@@ -131,6 +135,22 @@ class Game {
                     }, 2000);
 				} 
 			});
+	}
+	
+	async startTimerThread() {
+        let timeLeft = 30; // 30 seconds for the turn
+        this.timerDisplay.innerHTML = `Time left: ${timeLeft} seconds`;
+        
+        const timerInterval = setInterval(() => {
+			timeLeft--;
+            this.timerDisplay.innerHTML = `Time left: ${timeLeft} seconds`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("Time's up! You lost!");
+                this.yt = false;
+				this.surrender(false);
+            }
+        }, 1000);
 	}
 	
 	checkMoveClick(ev) {

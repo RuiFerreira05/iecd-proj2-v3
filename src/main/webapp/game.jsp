@@ -50,6 +50,7 @@
         <div id="turn-display" class="title-container">
             Your Turn!
         </div>
+        <div id="timer-display"></div>
     </section>
     <section class="board-section">
         <div class="board-container">
