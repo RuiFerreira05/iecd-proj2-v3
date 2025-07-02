@@ -287,22 +287,6 @@ public class ClientBean {
 			end= true;
 			writer.println("getXML nationalities");
 		}
-		
-		/*try {
-			//String response= xmlNat;
-			//String response = messageQueue.take();
-			System.out.println(response);
-			//System.out.print("Response: "+ response);
-			System.out.println(response);
-			String[] parts = response.split(" ");
-			if (parts[0].equals("found")) {
-				return response;
-			}
-			return null;
-		} catch (Exception e) {
-			System.out.println("Something went wrong with getNationalities: " + e.getMessage());
-			return null;
-		}*/
 	}
 	
 	public void updateUsers() {
