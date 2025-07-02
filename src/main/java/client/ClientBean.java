@@ -33,6 +33,7 @@ public class ClientBean {
 	private boolean yt = false;
 	private String board = null;
 	public String xmlNat= "";
+	public String xmlUser= "";
 	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
@@ -295,6 +296,14 @@ public class ClientBean {
 		}*/
 	}
 	
+	public void updateUsers() {
+		if (isConnected) {
+			xmlUser = "";
+			end = true;
+			writer.println("getXML users");
+		}
+	}
+	
 	
 	public boolean matchmake() {
 		if (!isConnected || !isLoggedIn) {
@@ -429,6 +438,19 @@ public class ClientBean {
 				return messageQueue.take();
 			} else {
 				return xmlNat;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public String getXmlUser() {
+		try {
+			if(xmlUser.isEmpty()) {
+				updateUsers();
+				return messageQueue.take();
+			} else {
+				return xmlUser;
 			}
 		} catch (Exception e) {
 			return null;
