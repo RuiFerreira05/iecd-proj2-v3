@@ -15,6 +15,11 @@
     }
     
     if (client.surrender()) {
+    	client.setPlaying(false);
+        client.setOpponentUsername(null);
+        client.setPlayerNum(null);
+        client.setYt(false);
+        client.setBoard(null);
     	response.getOutputStream().print("valid");
     } else {
         response.getOutputStream().print("error");
