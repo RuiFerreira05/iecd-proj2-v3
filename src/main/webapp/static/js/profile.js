@@ -13,8 +13,19 @@ document.getElementById("file-chooser").addEventListener("change", function(even
         file_reader.onload= function(){
 			console.log(file_reader.result);
             document.getElementById("photo").src= file_reader.result;
+			httpPostAsync(file_reader.result);
 			console.log(document.getElementById("photo").src);
         }
         file_reader.readAsDataURL(sel_file);   
     }
 });
+
+function httpPostAsync(file) {
+	var xmlHttp;
+	if (window.XMLHttpRequest)
+		xmlHttp = new XMLHttpRequest();
+	else
+		xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+	xmlHttp.open("POST", "register.jsp?file=" + file , true); // true for asynchronous 
+	xmlHttp.send();
+}
