@@ -5,6 +5,7 @@ class Game {
 		this.yt = yt;
 		this.player = yt ? 1 : 2;
         this.canvas = document.getElementById("board-canvas");
+		this.exitButton = document.getElementById("exit-button");
         this.ctx = this.canvas.getContext('2d');
         this.init();
     }
@@ -14,6 +15,9 @@ class Game {
 		this.updateBoard();
 		this.canvas.addEventListener("click", (ev) => {
 			this.handleClick(ev);
+        });
+		this.exitButton.addEventListener("click", () => {
+            this.surrender();
         });
 	}
 	
@@ -47,6 +51,19 @@ class Game {
 	        posx += line_interval;
 	        ctx.fillRect(posx, posy, 4, this.canvas.height - 6);
 	    }
+	}
+	
+	surrender() {
+		fetch("surrender.jsp")
+		    .then(response => response.text())
+            .then(data => {
+				if (data.includes("valid")) {
+					window.location.href = "index.jsp";
+				} else if (data.includes("error")) {
+					alert("Error surrendering the match.");
+                }
+            })
+            .catch(error => console.error("Error surrendering:", error));
 	}
 	
 	updateBoard() {
