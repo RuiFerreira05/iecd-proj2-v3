@@ -57,6 +57,8 @@
 	               String username = request.getParameter("user");
 	               String password = request.getParameter("pass");
 	               if (client.login(username, password)) {
+	            	   String favColor = client.getdata(username)[3];
+	            	   client.setFavColor(favColor);
 	                   response.sendRedirect("index.jsp");
 	               } else {
 	                   out.println("<div class='error-message'>Invalid username or password.</div>");

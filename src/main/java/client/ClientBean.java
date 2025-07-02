@@ -76,11 +76,7 @@ public class ClientBean {
 								end= true;
 								messageQueue.put(xmlNat);
 							}
-<<<<<<< HEAD
-						}else {
-=======
 						} else {
->>>>>>> ecd9d782eee46ee196a6b32bcddaeccc230b58b7
 							messageQueue.put(message);
 						}
 					} catch (Exception e) {

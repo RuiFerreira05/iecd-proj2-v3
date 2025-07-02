@@ -13,10 +13,6 @@
             response.sendRedirect("index.jsp");
         }
     }
-
-    if (!client.isConnected()) {
-        response.sendRedirect("index.jsp");
-    }
     
     if (client.surrender()) {
     	response.getOutputStream().print("valid");

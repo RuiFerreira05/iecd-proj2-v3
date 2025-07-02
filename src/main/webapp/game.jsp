@@ -29,11 +29,6 @@
 	opponentUsername = client.getOpponentUsername();
 	yt = client.isYt();
 	board = client.getBoard();
-	
-	if (client.getFavColor() == null) {
-		String favColor = client.getdata(client.getUsername())[3];
-		client.setFavColor(favColor);
-	}
 %>
 
 <!DOCTYPE html>
@@ -46,7 +41,7 @@
     <link rel="stylesheet" href="static/css/game.css" />
     <style>
         body {
-            <%= client.getFavColor() == null ? "#FFFFFF" : client.getFavColor() %>
+            background: <%= client.getFavColor() == null ? "#FFFFFF" : client.getFavColor() %>
         }
     </style>
 </head>
@@ -63,7 +58,7 @@
     </section>
     <section class="options-section">
         <div class="button-container">
-            <button type="button" id="exit-button" class="button-exit">Exit</button>
+            <button type="button" id="exit-button" class="button-exit">Surrender</button>
         </div>
     </section>
 </body>

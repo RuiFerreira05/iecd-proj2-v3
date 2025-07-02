@@ -56,14 +56,15 @@ class Game {
 	surrender() {
 		fetch("surrender.jsp")
 		    .then(response => response.text())
-            .then(data => {
+	        .then(data => {
+				console.log("Surrender response: ", data);
 				if (data.includes("valid")) {
 					window.location.href = "index.jsp";
 				} else if (data.includes("error")) {
 					alert("Error surrendering the match.");
-                }
-            })
-            .catch(error => console.error("Error surrendering:", error));
+	            }
+	        })
+	        .catch(error => console.error("Error surrendering:", error));
 	}
 	
 	updateBoard() {
