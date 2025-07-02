@@ -421,6 +421,14 @@ public class ClientBean {
 	public void setWriter(PrintWriter writer) {
 		this.writer = writer;
 	}
+	
+	public void setOpponentUsername(String opponentUsername) {
+		this.opponentUsername = opponentUsername;
+	}
+	
+	public void setPlayerNum(String playerNum) {
+		this.playerNum = playerNum;
+	}
 
 	public String getXmlNat() {
 		try {
