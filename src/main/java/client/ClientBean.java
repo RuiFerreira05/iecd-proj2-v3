@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -33,6 +35,7 @@ public class ClientBean {
 	private boolean yt = false;
 	private String board = null;
 	public String xmlNat= "";
+	public String xmlUser= "";
 	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
@@ -76,6 +79,13 @@ public class ClientBean {
 							if(message.contains("end")) {
 								end= true;
 								messageQueue.put(xmlNat);
+							}
+						} else if (parts[0].equals("foundUsers") || !end) {
+							end = false;
+							xmlUser = message;
+							if (message.contains("end")) {
+								end = true;
+								messageQueue.put(xmlUser);
 							}
 						} else {
 							messageQueue.put(message);
@@ -277,24 +287,14 @@ public class ClientBean {
 			end= true;
 			writer.println("getXML nationalities");
 		}
-		
-		/*try {
-			//String response= xmlNat;
-			//String response = messageQueue.take();
-			System.out.println(response);
-			//System.out.print("Response: "+ response);
-			System.out.println(response);
-			String[] parts = response.split(" ");
-			if (parts[0].equals("found")) {
-				return response;
-			}
-			return null;
-		} catch (Exception e) {
-			System.out.println("Something went wrong with getNationalities: " + e.getMessage());
-			return null;
-		}*/
 	}
 	
+	public void updateUsers() {
+		if (isConnected) {
+			xmlUser = "";
+			writer.println("getXML users");
+		}
+	}
 	
 	public boolean matchmake() {
 		if (!isConnected || !isLoggedIn) {
@@ -441,5 +441,35 @@ public class ClientBean {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public String getXmlUser() {
+		try {
+			if(xmlUser.isEmpty()) {
+				updateUsers();
+				return messageQueue.take();
+			} else {
+				return xmlUser;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public String[] getAllUsernames() {
+	    String xmlUsers = getXmlUser();
+	    if (xmlUsers == null) {
+	    	return new String[0];
+	    }
+	    xmlUsers = xmlUsers.replace("foundUsers ", "").replace("end", "").trim();
+	    String[] users = xmlUsers.split(";");
+	    List<String> usernames = new ArrayList<>();
+	    for (String user : users) {
+	        String trimmed = user.trim();
+	        if (!trimmed.isEmpty()) {
+	            usernames.add(trimmed);
+	        }
+	    }
+	    return usernames.toArray(new String[0]);
 	}
 }

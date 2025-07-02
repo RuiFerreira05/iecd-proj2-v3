@@ -22,9 +22,15 @@
 	if (!client.isConnected()) {
 	    response.sendRedirect("index.jsp");
 	}
-	    
+	
+	String[] allUsernames = client.getAllUsernames();
+    StringBuilder usernamesJS = new StringBuilder("[");
+    for (int i = 0; i < allUsernames.length; i++) {
+        usernamesJS.append("\"").append(allUsernames[i]).append("\"");
+        if (i < allUsernames.length - 1) usernamesJS.append(",");
+    }
+    usernamesJS.append("]");
 %>
-
 
 <!DOCTYPE html>
 <html>
@@ -43,7 +49,8 @@
     	<form class="search" method="post" action="search_player.jsp">
 	    	<div class="instructions">Insert user name of player</div>
 	        <div class="input-container">
-	            <input class="text-input" id="username" type="text" name="user">
+	            <input class="text-input" id="username" type="text" name="user" autocomplete="off">
+	            <div class="autocomplete-dropdown" id="dropdown"></div>
 	            <input type="submit" class="button-input" value="Search">
 	        </div>
     	</form>
@@ -60,6 +67,34 @@
 	       }
          %>
     </section>
+    <script type="text/javascript">
+	    const usernames = <%= usernamesJS.toString() %>;
+	    const input = document.getElementById('username');
+	    const dropdown = document.getElementById('dropdown');
+	
+	    input.addEventListener('input', function() {
+	        const val = this.value.toLowerCase();
+	        dropdown.innerHTML = '';
+	        if (!val) return;
+	        const matches = usernames.filter(name => name.toLowerCase().includes(val));
+	        matches.forEach(name => {
+	            const div = document.createElement('div');
+	            div.textContent = name;
+	            div.className = 'dropdown-item';
+	            div.onclick = function() {
+	                input.value = name;
+	                dropdown.innerHTML = '';
+	            };
+	            dropdown.appendChild(div);
+	        });
+	    });
+	
+	    document.addEventListener('click', function(e) {
+	        if (!dropdown.contains(e.target) && e.target !== input) {
+	            dropdown.innerHTML = '';
+	        }
+	    });
+    </script>
     <section class="exit-section">
         <div class="button-container">
             <a href="index.jsp">

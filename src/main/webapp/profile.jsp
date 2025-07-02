@@ -3,6 +3,12 @@
     		pageEncoding="UTF-8"%>
 <%@page import="client.ClientBean"%>
 <%@page import="org.w3c.dom.Document"%>
+<%@ page import="java.io.IOException" %>
+<%@ page import="java.io.InputStream" %>
+<%@ page import="jakarta.servlet.http.Part" %>
+<%@ page import="java.net.*" %>
+<%@page import="jakarta.servlet.annotation.MultipartConfig"%>
+<%@ page import="java.util.Base64" %>
 
 	<%! private ClientBean client = null; %>
 	<%! public String username= ""; %>
@@ -54,23 +60,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <link rel="stylesheet" href="static/css/profile.css" />
-
-    <script type="module" src="static/js/profile.js"></script>
 </head>
 <body>
     
-    <form name="profileForm" method="post" action="profile.jsp">
+    <form name="profileForm" method="post" action="profile.jsp" enctype="multipart/form-data">
         <section class="photo-section">
             <div class="photo-container">
                 <div class="frame">
-                    <!-- <canvas class="photo-frame" width="80" height="100"></canvas> -->
-                    <img class="photo-frame" id="photo" src="data:image/png;base64,<%= photo %>" alt="profile picture"/>
+                    <img class="photo-frame" id="photoPreview" src="data:image/png;base64,<%= photo %>" alt="profile picture">
                 </div>
             </div>
-            <button class="edit-photo-button" id="edit-photo-button">
+            <button type="button" class="edit-photo-button" id="edit-photo-button">
                 <i class="bi-pencil-square"></i>
             </button>
-            <input accept="image/*" type="file" id="file-chooser" class="file-chooser" name="photo"/>
+            <input accept="image/*" type="file" id="file-chooser" class="file-chooser" name="photo">
         </section>
         
         <section class="profile-info-section">
@@ -92,8 +95,6 @@
                     <input class="profile-text-input" id="age" type="text" value="<%= age %>" name="age" required/>
                 </div>
                 <div>
-                    <%--<label for="nationality" class="label"> Nationality </label>
-                    <input class="profile-text-input" id="nationality" type="text" value="<%= nationality %>"  name="nationality" required/> --%>
                     <label for="nationality" class="label"> Nationality </label>
                     <select class="nationality-selector" id="nationality" name="nationality" required>
                         <option value="<%= nationality %>"> <%= nationality %> </option>
@@ -120,9 +121,6 @@
                 <div class="game-times-container">
                     <label for="game-times-select" class="label"> Games played </label>
                     <input class="profile-text-input" id="game-times-select" type="text" value="<%= games_played %>" disabled required/>
-                    <%-- <select class="game-times-select" id="game-times-select">
-                        <option value=""> See times </option>
-                    </select> --%>
                 </div>
             </div>
         </section>
@@ -145,6 +143,17 @@
         String age_change = request.getParameter("age");
         String nationality_change = request.getParameter("nationality");
         String color_change = request.getParameter("favcolor");
+        String profilePicture = "default";
+        Part photoPart = request.getPart("photo");
+        
+        if (photoPart != null && photoPart.getSize() > 0) {
+            try (InputStream is = photoPart.getInputStream()) {
+                byte[] photoData = is.readAllBytes();
+                profilePicture = Base64.getEncoder().encodeToString(photoData);
+            } catch (IOException e) {
+                out.println("<p class='error-message'>Error reading photo: " + e.getMessage() + "</p>");
+            }
+        }
     	        
         boolean[] change= new boolean[6];
         if(!username.equals(username_change)){
@@ -154,23 +163,28 @@
         if(!pass.equals(pass_change)){
         	change[1]= client.changeData("password", pass_change);
         	changed= true;
-        }
-        
+        } 
         if(!age.equals(age_change)){
-        	change[3]= client.changeData("age", age_change);
+        	change[2]= client.changeData("age", age_change);
         	changed= true;
         }
         if(!nationality.equals(nationality_change)){
-        	change[4]= client.changeData("nacionality", nationality_change);
+        	change[3]= client.changeData("nacionality", nationality_change);
         	changed= true;
         }
         if(!favcolor.equals(color_change)){
-        	change[5]= client.changeData("color", color_change);
+        	change[4]= client.changeData("color", color_change);
         	changed= true;
         }
+        if(!photo.equals(profilePicture)){
+        	change[5]= client.changeData("photo", profilePicture);
+        	changed= true;
+        }
+        
         for(int i=0; i < change.length ; i++ ){
         	if(change[i]){
-        		nice= true;		
+        		nice= true;	
+        		//response.sendRedirect("index.jsp");
         	}
         }	
         if(changed && !nice){
@@ -181,5 +195,21 @@
 
     %> 
 </body>
-
+<script>
+	console.log("mano");
+    document.getElementById('file-chooser').addEventListener('change', function(evt) {
+        const [file] = this.files;
+        console.log("mimimi");
+        if (file) {
+            document.getElementById('photoPreview').src = URL.createObjectURL(file);
+            console.log("heree");
+        }
+    });
+    
+    document.getElementById('edit-photo-button').addEventListener('click', function() {
+        document.getElementById('file-chooser').click();
+    });
+    
+    
+</script>
 </html>

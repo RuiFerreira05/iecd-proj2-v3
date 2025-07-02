@@ -5,7 +5,7 @@
 <%@ page import="java.io.InputStream" %>
 <%@ page import="jakarta.servlet.http.Part" %>
 <%@ page import="java.net.*" %>
-<%@ page import="java.util.Iterator" %>
+<%@page import="jakarta.servlet.annotation.MultipartConfig"%>
 
 <%! private ClientBean client = null; %>
 <%! public String natsxml= ""; %>
@@ -38,7 +38,7 @@
     <link rel="stylesheet" href="static/css/register.css" />
 </head>
 <body>
-    <form name="registerForm" action="register.jsp" method="post">
+    <form name="registerForm" action="register.jsp" method="post" enctype="multipart/form-data">
         <section class="photo-section">
             <div class="photo-container">
                 <div class="frame">
@@ -105,9 +105,7 @@
             String favcolor = request.getParameter("color");
             
             String profilePicture = "default";
-            //Part photoPart = request.getPart("photo");
-            //profilePicture  = request.getParameter("file");
-            profilePicture  = request.getParameter("file");
+            Part photoPart = request.getPart("photo");
             
             System.out.println("user: " + user);
     		System.out.println("pass: " + pass);
@@ -116,20 +114,19 @@
     		System.out.println("color: " + favcolor);
     		System.out.println("photo: " + profilePicture);
             
-            /*if (photoPart != null && photoPart.getSize() > 0) {
+            if (photoPart != null && photoPart.getSize() > 0) {
                 try (InputStream is = photoPart.getInputStream()) {
                     byte[] photoData = is.readAllBytes();
                     profilePicture = Base64.getEncoder().encodeToString(photoData);
                 } catch (IOException e) {
                     out.println("<p class='error-message'>Error reading photo: " + e.getMessage() + "</p>");
                 }
-            }*/
+            }
             boolean ok = client.register(user, pass, nationality, age, favcolor, profilePicture);
             if (ok) {
             	System.out.println("ok");
             	session.setAttribute("user", user);
-                response.sendRedirect("index.jsp");
-                return;
+                //response.sendRedirect("index.jsp");
             } else {
                 out.println("<p class='error-message'>Error while registing, please try again.</p>");
             }
@@ -142,10 +139,6 @@
         const [file] = this.files;
         if (file) {
             document.getElementById('photoPreview').src = URL.createObjectURL(file);
-            let help= URL.createObjectURL(file).toString();
-            //httpPostAsync(URL.createObjectURL(file).toString());
-            console.log("this: " + URL.createObjectURL(file));
-            console.log(file);
         }
     });
     
@@ -153,17 +146,6 @@
         document.getElementById('file-chooser').click();
     });
     
-    /*function httpPostAsync(file) {
-    	var xmlHttp;
-    	if (window.XMLHttpRequest)
-    		xmlHttp = new XMLHttpRequest();
-    	else
-    		xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-    	console.log("register.jsp?file=" + file );
-    	xmlHttp.open("GET", "register.jsp?file=" + file , true); 
-    	console.log("post");
-    	xmlHttp.send();
-    	console.log("sent");
-    }*/
+    
 </script>
 </html>

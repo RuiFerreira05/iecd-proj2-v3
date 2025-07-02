@@ -3,50 +3,107 @@
     src: url("../fonts/VT323-Regular.ttf") format("truetype");
 }
 
-body, html{
+body, html {
     height: 100%;
 }
 
-body{
+body {
     font-family: "VT323", monospace;
     font-weight: 400;
     font-style: normal;
     background-image: url(../images/Background.png);
     background-repeat: no-repeat;
     background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.title-container{
-    margin-top: 40px;
+.title-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+}
+
+.title-container {
     color: #f9cd88;
     text-align: center;
     font-size: 100px;
 }
 
-.instructions{
-	font-size: 40px;
-    /* color: #f9cd88; */
-    height: 200px;
+.search-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.instructions {
+	color: #f9cd88;
+    font-size: 40px;
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: end;
     padding-bottom: 20px;
+    height: auto;
+    margin-bottom: 20px;
 }
-    
 
-.button-container{
-    bottom: 0;
-    width: 100%;
+.input-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: auto;
+    margin: 0 auto;
+    margin-bottom: 150px;
 }
 
-.button-input{
+.text-input {
+    background-color: #f9cd88;
+    border-style: solid;
+    border-width: 8px;
+    border-image: url(../images/WoodBorder.webp);
+    border-image-slice: 15%;
+    height: 45px;
+    width: 300px;
+    font-size: 24px;
+    font-family: "VT323", monospace;
+    box-sizing: border-box;
+}
+
+.autocomplete-dropdown {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: #fffbe6;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 300px;
+    box-sizing: border-box;
+}
+
+.dropdown-item {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 24px;
+    font-family: "VT323", monospace;
+}
+
+.dropdown-item:hover {
+    background: #f9cd88;
+}
+
+.button-input {
     height: 50px;
     width: 100px;
-    margin-inline: 50px;
+    margin-left: 20px;
     background-color: #f9cd88;
     border-style: solid;
     border-width: 10px;
@@ -57,18 +114,10 @@ body{
     cursor: pointer;
 }
 
-.text-input{
-    background-color: #f9cd88;
-    border-style: solid;
-    border-width: 8px;
-    border-image: url(../images/WoodBorder.webp);
-    border-image-slice: 15%;
-    height: 30px;
-    width: 300px;
-}
-
-.input-container{
+.button-container {
+    width: 100%;
     display: flex;
-    justify-content: center;
-    height: 250px;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-bottom: 30px;
 }
