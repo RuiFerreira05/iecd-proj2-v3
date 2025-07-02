@@ -40,12 +40,6 @@
 	    defeats = data[6];
 	    games_played = data[7];
 	    pass= client.getPass();
-	    
-	    client.getNationalities();
-	    client.getNats();
-
-		System.out.println("Nats: " + client.getNats());
-	    
 	%>
 
 <!DOCTYPE html>
@@ -81,7 +75,7 @@
         <section class="profile-info-section">
             <div class="profile-container">
                 <div>
-                    <label for="name" class="label"> Name </label>
+                    <label for="name" class="label"> name </label>
                     <input class="profile-text-input" id="name" type="text" value="<%= username %>" name="username" required/>
                 </div>
                 <div>

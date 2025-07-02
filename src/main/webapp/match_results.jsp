@@ -30,21 +30,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Match Results</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>Match Results</title>
+    <link rel="stylesheet" href="static/css/match_results.css" />
 </head>
 <body>
 	<h1>Match Results</h1>
-	<% if (tie) { %>
-    	<p>The match ended in a tie.</p>
-    <% } else if (win) { %>
-    	<p>Congratulations! You won the match!</p>
-    <% } else { %>
-    	<p>Sorry, you lost the match.</p>
-    <% } %>
-    <div>
-        <a href="index.jsp">Return to Home</a>
-        <a href="matchmaking.jsp">Play Again</a>
+	<div class="game-end-information">
+		<% if (tie) { %>
+    		<p>🤝 The match ended in a tie. 🤝</p>
+    	<% } else if (win) { %>
+    		<p>🏆 Congratulations! You won the match! 🏆</p>
+    	<% } else { %>
+    		<p>😢 Sorry, you lost the match. 😢</p>
+    	<% } %>
+    </div>
+    <div class="button-container">
+        <a href="index.jsp">
+        	<input class="button-input" value="Return to Home" type="button">
+        </a>
+        <a href="matchmaking.jsp">
+        	<input class="button-input" value="Play Again" type="button">
+        </a>
     </div>
 </body>
 </html>
