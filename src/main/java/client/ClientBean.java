@@ -3,9 +3,16 @@ package client;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.xml.sax.InputSource;
+
+import org.w3c.dom.Document;
 
 
 
@@ -32,7 +39,7 @@ public class ClientBean {
 	private String opponentUsername = null;
 	private boolean yt = false;
 	private String board = null;
-	public String xmlNat = "";
+	public String xmlNat= "";
 	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
@@ -67,6 +74,7 @@ public class ClientBean {
 								yt = false;
 							}
 						} else if (parts[0].equals("board")) {
+							System.out.println("board updated:\n" + message);
 							boardChanged = true;
 							board = parts[1];
 						} else if(parts[0].equals("foundXML") || !end) {
@@ -272,8 +280,8 @@ public class ClientBean {
 	
 	public void updateNationalities() {
 		if (isConnected) {
-			xmlNat = "";
-			end = true;
+			xmlNat= "";
+			end= true;
 			writer.println("getXML nationalities");
 		}
 		
@@ -420,10 +428,10 @@ public class ClientBean {
 	public void setWriter(PrintWriter writer) {
 		this.writer = writer;
 	}
-	
+
 	public String getXmlNat() {
 		try {
-			if (xmlNat.isEmpty()) {
+			if(xmlNat.isEmpty()) {
 				updateNationalities();
 				return messageQueue.take();
 			} else {
