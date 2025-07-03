@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:include schemaLocation="nationality.xsd" />
+
+    <xsd:simpleType name="usernameType">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="fotoType">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType> 
+
+    <!-- <xsd:simpleType name="flagType">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType> -->
+
+    <xsd:simpleType name="placeType">
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+
+    <xsd:complexType name="userType">
+        <xsd:sequence>
+            <xsd:element name="place" type="placeType"/>
+            <xsd:element name="photo" type="fotoType"/>
+            <xsd:element name="username" type="usernameType"/>
+            <xsd:element name="flag" type="flagType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema> 
