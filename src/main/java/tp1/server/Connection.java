@@ -406,7 +406,6 @@ public class Connection extends Thread{
                 String nats_info= nat.getElementsByTagName("abbreviation").item(0).getTextContent() + " " ;
                 xml += nats_info;
             }
-            System.out.println(xml.length());
             out.println("foundXML " + xml + "end");
         }
         if(xml_name.equals("walloffame")){

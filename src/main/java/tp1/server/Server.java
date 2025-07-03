@@ -261,7 +261,6 @@ public class Server {
             photo.appendChild(this.wallFame.createTextNode(this.wallofFame.get(i).getPhoto()));
             Element username= this.wallFame.createElement("username");
             username.appendChild(this.wallFame.createTextNode(this.wallofFame.get(i).getUsername()));
-            System.out.println(this.wallofFame.get(i).getUsername());
             Element flag= this.wallFame.createElement("flag");
             flag.appendChild(this.wallFame.createTextNode(getNationalityFlag(this.wallofFame.get(i).getNacionality())));
 
@@ -397,7 +396,6 @@ public class Server {
             Player newPlayer = new Player(username, password, nacionality, age, color, foto);
             newPlayer.setSocket(connection.getClient());
             players.add(newPlayer);
-            System.out.println("registedd");
             return true;
         }
     }

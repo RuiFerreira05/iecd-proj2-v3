@@ -308,7 +308,6 @@ public class Client {
                         profilePicture= Base64.getEncoder().encodeToString(photoData);
                     }
                 }
-                System.out.println(profilePicture);
 		        out.println("change photo " + profilePicture);
 		        try {
 		            String response = in.readLine();

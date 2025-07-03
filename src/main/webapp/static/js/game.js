@@ -9,6 +9,7 @@ class Game {
 		this.turnDisplay = document.getElementById("turn-display");
 		this.timerDisplay = document.getElementById("timer-display");
         this.ctx = this.canvas.getContext('2d');
+		this.timerinterval = null;
         this.init();
     }
 	
@@ -95,6 +96,7 @@ class Game {
 		if (!this.yt) {
 			return;
 		}
+		clearInterval(this.timerInterval);
 		let [x, y] = this.getCellsFromMouse(ev);
 		console.log("Clicked cell: ", x, y);
 		fetch(`move.jsp?x=${y}&y=${x}`)
@@ -141,11 +143,11 @@ class Game {
         let timeLeft = 30; // 30 seconds for the turn
         this.timerDisplay.innerHTML = `Time left: ${timeLeft} seconds`;
         
-        const timerInterval = setInterval(() => {
+        this.timerInterval = setInterval(() => {
 			timeLeft--;
             this.timerDisplay.innerHTML = `Time left: ${timeLeft} seconds`;
             if (timeLeft <= 0) {
-                clearInterval(timerInterval);
+                clearInterval(this.timerInterval);
                 alert("Time's up! You lost!");
                 this.yt = false;
 				this.surrender(false);
