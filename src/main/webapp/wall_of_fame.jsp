@@ -23,8 +23,15 @@
 	if (!client.isConnected()) {
 	    response.sendRedirect("index.jsp");
 	}
-	    
-	String[] walloffame = client.getWof();
+	
+	String wall= client.getXmlWof();
+	String[] wallArray= wall.split(" ");
+	System.out.println(wall);
+	System.out.println("Length array: " + wallArray.length);
+	
+	for (int i = 1; i < wallArray.length; i++) {
+		walloffame[i - 1] = wallArray[i];
+	}
 	
 	length_wall= 0;
 	for(int i=0; i < walloffame.length; i++){
@@ -32,6 +39,7 @@
             length_wall += 1;
         }
     }
+	System.out.println("Length data: " + length_wall);
 	    
 	%>
 
@@ -123,6 +131,9 @@
                                 if(length_wall >= 9){
                                     image= walloffame[6];
                                 }
+                                else{
+                                    image= " ";
+                                }
                             %>
                             <img src="data:image/png;base64,<%= image %>" alt="user photo" class="photo">
                         </div>    
@@ -156,6 +167,9 @@
                                 if(length_wall >= 12){
                                     image= walloffame[9];
                                 }
+                                else{
+                                    image= " ";
+                                }
                             %>
                             <img src="data:image/png;base64,<%= image %>" alt="user photo" class="photo">
                         </div>    
@@ -188,6 +202,9 @@
                             <% 
                                 if(length_wall == 15){
                                     image= walloffame[12];
+                                }
+                                else{
+                                    image= " ";
                                 }
                             %>
                             <img src="data:image/png;base64,<%= image %>" alt="user photo" class="photo">

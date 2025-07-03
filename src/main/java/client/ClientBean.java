@@ -36,6 +36,7 @@ public class ClientBean {
 	private String board = null;
 	public String xmlNat= "";
 	public String xmlUser= "";
+	public String xmlWof= "";
 	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
@@ -86,6 +87,13 @@ public class ClientBean {
 							if (message.contains("end")) {
 								end = true;
 								messageQueue.put(xmlUser);
+							}
+						} else if (parts[0].equals("foundWall") || !end) {
+							end = false;
+							xmlWof = message;
+							if (message.contains("end")) {
+								end = true;
+								messageQueue.put(xmlWof);
 							}
 						} else {
 							messageQueue.put(message);
@@ -281,6 +289,13 @@ public class ClientBean {
 		}
 	}
 	
+	public void updateWof() {
+		if (isConnected) {
+			xmlWof= "";
+			writer.println("getXML walloffame");
+		}
+	}
+	
 	public void updateNationalities() {
 		if (isConnected) {
 			xmlNat= "";
@@ -443,6 +458,19 @@ public class ClientBean {
 		}
 	}
 	
+	public String getXmlWof() {
+		try {
+			if(xmlWof.isEmpty()) {
+				updateWof();
+				return messageQueue.take();
+			} else {
+				return xmlWof;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	public String getXmlUser() {
 		try {
 			if(xmlUser.isEmpty()) {
@@ -471,5 +499,15 @@ public class ClientBean {
 	        }
 	    }
 	    return usernames.toArray(new String[0]);
+	}
+	
+	public String[] getUsersFame() {
+	    String xmlWall = getXmlWof();
+	    if (xmlWall == null) {
+	    	return new String[0];
+	    }
+	    xmlWall = xmlWall.replace("foundWall ", "").replace("end", "").trim();
+	    String[] users = xmlWall.split(" ");
+	    return users;
 	}
 }

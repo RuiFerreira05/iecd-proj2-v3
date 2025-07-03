@@ -36,7 +36,6 @@
 	    }
 	    
 	    String[] data = client.getdata(client.getUsername());
-	    //System.out.println(data);
 	    username = data[0];
 	    nationality = data[1];
 	    age = data[2];
