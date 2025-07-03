@@ -126,7 +126,6 @@
             if (ok) {
             	System.out.println("ok");
             	session.setAttribute("user", user);
-                //response.sendRedirect("index.jsp");
             } else {
                 out.println("<p class='error-message'>Error while registing, please try again.</p>");
             }
@@ -145,7 +144,5 @@
     document.getElementById('edit-photo-button').addEventListener('click', function() {
         document.getElementById('file-chooser').click();
     });
-    
-    
 </script>
 </html>

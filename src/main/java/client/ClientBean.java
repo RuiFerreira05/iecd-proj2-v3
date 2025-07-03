@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-
-
 public class ClientBean {
 	
 	private final String uuid;
@@ -59,7 +57,6 @@ public class ClientBean {
 					try {
 						String message = reader.readLine();
 						String parts[] = message.split(" ");
-						//System.out.println(parts[0]);
 						if (parts[0].equals("gs")) {
 							isPlaying = true;
 							isMatchmaking = false;
@@ -234,7 +231,6 @@ public class ClientBean {
 		writer.println("getdata " + username);
 		try {
 			String response = messageQueue.take();
-			//System.out.println(response);
 			String[] parts = response.split(" ");
 			if (parts[0].equals("found")) {
 				for (int i = 1; i < parts.length; i++) {

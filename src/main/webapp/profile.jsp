@@ -182,8 +182,7 @@
         
         for(int i=0; i < change.length ; i++ ){
         	if(change[i]){
-        		nice= true;	
-        		//response.sendRedirect("index.jsp");
+        		nice= true;
         	}
         }	
         if(changed && !nice){
@@ -198,17 +197,13 @@
 	console.log("mano");
     document.getElementById('file-chooser').addEventListener('change', function(evt) {
         const [file] = this.files;
-        console.log("mimimi");
         if (file) {
             document.getElementById('photoPreview').src = URL.createObjectURL(file);
-            console.log("heree");
         }
     });
     
     document.getElementById('edit-photo-button').addEventListener('click', function() {
         document.getElementById('file-chooser').click();
     });
-    
-    
 </script>
 </html>

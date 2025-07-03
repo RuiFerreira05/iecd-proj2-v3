@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 @font-face {
     font-family: "VT323";
     src: url(../fonts/VT323-Regular.ttf) format("truetype");
@@ -30,7 +32,6 @@ body{
 
 .wall{
     display: grid;
-    /* place-items: center; */
     grid-auto-rows: 70px;
     margin-top: 30px;
     background-color: #f9cd88;
