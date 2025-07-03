@@ -38,7 +38,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <link rel="stylesheet" href="static/css/game.css" />
+    <link rel="stylesheet" href="static/css/gamepage.css" />
     <style>
         body {
             background: <%= client.getFavColor() == null ? "#FFFFFF" : client.getFavColor() %>
@@ -50,7 +50,7 @@
         <div id="turn-display" class="title-container">
             Your Turn!
         </div>
-        <div id="timer-display"></div>
+        <div id="timer-display" class= "timer"></div>
     </section>
     <section class="board-section">
         <div class="board-container">

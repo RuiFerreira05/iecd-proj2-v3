@@ -97,7 +97,7 @@ class Game {
 		}
 		let [x, y] = this.getCellsFromMouse(ev);
 		console.log("Clicked cell: ", x, y);
-		fetch(`move.jsp?x=${y}&y=${x}`) // yes. x and y are swapped in the request, for some reason this is the only way to make it work
+		fetch(`move.jsp?x=${y}&y=${x}`)
 		    .then(response => response.text())
             .then(data => {
                 console.log("Move response: ", data);

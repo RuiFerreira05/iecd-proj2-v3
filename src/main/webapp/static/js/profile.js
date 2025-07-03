@@ -1,4 +1,3 @@
-
 const photo_canvas= document.getElementById("photo-frame");
 
 document.getElementById("edit-photo-button").addEventListener("click", function(){

@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-
-
 public class ClientBean {
 	
 	private final String uuid;
@@ -36,6 +34,7 @@ public class ClientBean {
 	private String board = null;
 	public String xmlNat= "";
 	public String xmlUser= "";
+	public String xmlWof= "";
 	private boolean boardChanged = false;
 	
 	private String serverIP = "localhost";
@@ -58,7 +57,6 @@ public class ClientBean {
 					try {
 						String message = reader.readLine();
 						String parts[] = message.split(" ");
-						//System.out.println(parts[0]);
 						if (parts[0].equals("gs")) {
 							isPlaying = true;
 							isMatchmaking = false;
@@ -86,6 +84,13 @@ public class ClientBean {
 							if (message.contains("end")) {
 								end = true;
 								messageQueue.put(xmlUser);
+							}
+						} else if (parts[0].equals("foundWall") || !end) {
+							end = false;
+							xmlWof = message;
+							if (message.contains("end")) {
+								end = true;
+								messageQueue.put(xmlWof);
 							}
 						} else {
 							messageQueue.put(message);
@@ -226,7 +231,6 @@ public class ClientBean {
 		writer.println("getdata " + username);
 		try {
 			String response = messageQueue.take();
-			//System.out.println(response);
 			String[] parts = response.split(" ");
 			if (parts[0].equals("found")) {
 				for (int i = 1; i < parts.length; i++) {
@@ -278,6 +282,13 @@ public class ClientBean {
 		} catch (Exception e) {
 			System.out.println("Something went wrong with getWof: " + e.getMessage());
 			return null;
+		}
+	}
+	
+	public void updateWof() {
+		if (isConnected) {
+			xmlWof= "";
+			writer.println("getXML walloffame");
 		}
 	}
 	
@@ -443,6 +454,19 @@ public class ClientBean {
 		}
 	}
 	
+	public String getXmlWof() {
+		try {
+			if(xmlWof.isEmpty()) {
+				updateWof();
+				return messageQueue.take();
+			} else {
+				return xmlWof;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	public String getXmlUser() {
 		try {
 			if(xmlUser.isEmpty()) {
@@ -471,5 +495,15 @@ public class ClientBean {
 	        }
 	    }
 	    return usernames.toArray(new String[0]);
+	}
+	
+	public String[] getUsersFame() {
+	    String xmlWall = getXmlWof();
+	    if (xmlWall == null) {
+	    	return new String[0];
+	    }
+	    xmlWall = xmlWall.replace("foundWall ", "").replace("end", "").trim();
+	    String[] users = xmlWall.split(" ");
+	    return users;
 	}
 }

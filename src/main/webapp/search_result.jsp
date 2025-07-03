@@ -83,10 +83,6 @@
                 <div>
                     <label for="nationality" class="label"> Nationality </label>
                     <input class="profile-text-input" id="nationality" type="text" value="<%= nationality %>"  name="nationality" disabled>
-                    <!--  <label for="nationality" class="label"> Nationality </label>
-                    <select class="nationality-selector" id="nationality" required>
-                        <option value=""> Choose nationality </option>
-                    </select> -->
                 </div>
                 <div>
                     <label for="defeats" class="label"> Defeats </label>
@@ -99,9 +95,6 @@
                 <div class="game-times-container">
                     <label for="game-times-select" class="label"> Games played </label>
                     <input class="profile-text-input" id="game-times-select" type="text" value="<%= games_played %>" disabled>
-                    <!--  <select class="game-times-select" id="game-times-select">
-                        <option value=""> See times </option>
-                    </select> -->
                 </div>
                 
             </div>
